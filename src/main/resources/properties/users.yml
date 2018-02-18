@@ -1,0 +1,16 @@
+id: pera
+firstName: Petar
+lastName: Petrovic
+email: pera@something.com
+password: pera
+groups:
+ - id: bankar
+ - id: manager
+---
+id: zika
+firstName: Zika
+lastName: Zikic
+email: zika@something.com
+password: zika
+groups:
+ - id: bankar
