@@ -16,7 +16,7 @@
     </userTask>
     <sequenceFlow id="flow2" sourceRef="exclusivegateway1" targetRef="usertask1"></sequenceFlow>
     <sequenceFlow id="flow3" sourceRef="usertask1" targetRef="servicetask1"></sequenceFlow>
-    <serviceTask id="servicetask1" name="Formiranje liste firmi na osnovu kategorije"></serviceTask>
+    <serviceTask id="servicetask1" name="Formiranje liste firmi na osnovu kategorije" activiti:resultVariableName="firme"></serviceTask>
     <exclusiveGateway id="exclusivegateway2" name="Exclusive Gateway"></exclusiveGateway>
     <sequenceFlow id="flow4" sourceRef="servicetask1" targetRef="exclusivegateway2"></sequenceFlow>
     <userTask id="usertask2" name="Informisanje o ne postojanju firmi"></userTask>
@@ -101,7 +101,9 @@
     <exclusiveGateway id="exclusivegateway7" name="Exclusive Gateway"></exclusiveGateway>
     <sequenceFlow id="flow18" sourceRef="exclusivegateway7" targetRef="usertask4"></sequenceFlow>
     <boundaryEvent id="boundarytimer1" name="Timer" attachedToRef="subprocess1" cancelActivity="true">
-      <timerEventDefinition></timerEventDefinition>
+      <timerEventDefinition>
+        <timeDate>${rokPonudeId}</timeDate>
+      </timerEventDefinition>
     </boundaryEvent>
     <endEvent id="endevent6" name="End"></endEvent>
     <sequenceFlow id="flow28" sourceRef="subprocess1" targetRef="endevent6"></sequenceFlow>

@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User createUser(String name, String email, String username, String password,
 						   String address, String city, String country, String zipCode, 
-						   String userType, Location location, String jobCategories ) {
+						   String userType, Location location, String jobCategories, String distance) {
 		User user = new User();
 		user.setName(name);
 		user.setEmail(email);
@@ -59,10 +59,11 @@ public class UserServiceImpl implements UserService {
 		user.setCity(city);
 		user.setCountry(country);
 		user.setZipCode(zipCode);
+		user.setIsActivated(false);
 		user.setType(UserType.valueOf(userType.toUpperCase()));
 		if(user.getType() == UserType.PRAVNO) {
 			user.setJobCategories(parseJobCategoriesFromProcess(jobCategories));
-			//user.setDistance(Double.valueOf(distance));
+			user.setDistance(Double.valueOf(distance));
 		}
 		user.setLocation(location);
 		user.setRegistrationLink(generateRegistrationLink(user.getUsername()));
@@ -96,6 +97,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void startRegisterProcess() {
 		Map<String, Object> registerProcessVariables = new HashMap<String, Object>();
+		registerProcessVariables.put("delatnostId", "");
+		registerProcessVariables.put("udaljenostId", 0L);
 		TaskService taskService = processEngine.getTaskService();/////
 		List<Task> tasks = taskService.createTaskQuery().taskAssignee("pera").list();/////
 		System.out.println("Pera pre startovanja procesa ima: " + tasks.size() + " taskova");/////

@@ -9,7 +9,7 @@ public interface UserService extends Serializable {
 
 	User createUser(String name, String email, String username, String password,
 					String address, String city, String country, String zipCode, 
-					String userType, Location location, String jobCategories);
+					String userType, Location location, String jobCategories, String distance);
 	User getUser(Long userId);
 	void deleteUser(String username, String email);
 	boolean checkUnique(String username,String email);

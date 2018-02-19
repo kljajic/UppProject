@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.TaskService;
@@ -52,7 +51,6 @@ public class UserTaskServiceImpl implements UserTaskService{
 		TaskService taskService = processEngine.getTaskService();
 		Map<String, Object> taskVariables = mapTaskValues(userTask);
 		taskService.complete(userTask.getId(), taskVariables);
-		processEngine.getRuntimeService().setVariables(userTask.getProcessInstanceId(), taskVariables);
 		List<Task> tasks = taskService.createTaskQuery().taskAssignee("pera").list();
 		System.out.println("Nakon odobravanja taska pera ima: " + tasks.size() + " taskova");
 		System.out.println("Trenutno imam aktivnih procesa: " + processEngine.getRuntimeService().createProcessInstanceQuery().count());
