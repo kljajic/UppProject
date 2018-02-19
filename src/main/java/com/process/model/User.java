@@ -63,6 +63,9 @@ public class User implements Serializable{
 	@Column(name = "distance")
 	private Double distance;
 	
+	@Column(name = "registrationLink")
+	private String registrationLink;
+	
 	@ManyToOne
 	private Location location;
 	
@@ -181,6 +184,14 @@ public class User implements Serializable{
 	@JsonProperty
 	public void setJobCategories(Set<JobCategory> jobCategories) {
 		this.jobCategories = jobCategories;
+	}
+
+	public String getRegistrationLink() {
+		return registrationLink;
+	}
+
+	public void setRegistrationLink(String registrationLink) {
+		this.registrationLink = registrationLink;
 	}
 	
 }

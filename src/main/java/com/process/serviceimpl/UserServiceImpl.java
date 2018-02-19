@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -65,8 +65,11 @@ public class UserServiceImpl implements UserService {
 			//user.setDistance(Double.valueOf(distance));
 		}
 		user.setLocation(location);
-		userRepository.save(user);
-		emailService.sendRegistrationMail(email);
+		user.setRegistrationLink(generateRegistrationLink(user.getUsername()));
+		user = userRepository.save(user);
+		
+		emailService.sendRegistrationMail(user, email);
+		
 		return user;
 	}
 
@@ -120,4 +123,35 @@ public class UserServiceImpl implements UserService {
 		user.setIsActivated(true);
 	}
 	
+	@Override
+	public String generateRegistrationLink(String username) {
+
+        String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String lower = upper.toLowerCase();
+        String numbers = "1234567890";
+        
+        String characters = upper + lower + numbers;
+        StringBuilder builder = new StringBuilder();
+        Random random = new Random();
+        int length = random.nextInt(100);
+        
+        while(builder.length() < length){
+        	int index = (int) (random.nextFloat() * characters.length());
+        	builder.append(characters.charAt(index));
+        }
+		
+		return builder.toString() + username;
+	}
+
+	@Override
+	public boolean confirmRegistration(String registrationLink, Long userId) {
+		User user = userRepository.findOne(userId);
+		
+		if(user != null && user.getRegistrationLink().equals(registrationLink)) {
+			user.setIsActivated(true);
+			return true;
+		}
+		
+		return false;
+	}
 }

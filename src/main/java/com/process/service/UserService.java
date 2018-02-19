@@ -15,5 +15,6 @@ public interface UserService extends Serializable {
 	boolean checkUnique(String username,String email);
 	void startRegisterProcess();
 	void activateAcount(String email, String username);
-	
+	String generateRegistrationLink(String username);
+	boolean confirmRegistration(String registrationLink, Long userId);
 }
