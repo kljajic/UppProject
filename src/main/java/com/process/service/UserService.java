@@ -9,10 +9,11 @@ public interface UserService extends Serializable {
 
 	User createUser(String name, String email, String username, String password,
 					String address, String city, String country, String zipCode, 
-					String userType, String jobCategories, String distance, Location location);
+					String userType, Location location, String jobCategories);
 	User getUser(Long userId);
 	void deleteUser(String username, String email);
 	boolean checkUnique(String username,String email);
 	void startRegisterProcess();
+	void activateAcount(String email, String username);
 	
 }

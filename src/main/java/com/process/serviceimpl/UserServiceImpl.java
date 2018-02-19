@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.activiti.engine.ProcessEngine;
+import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -19,6 +20,7 @@ import com.process.model.Location;
 import com.process.model.User;
 import com.process.model.UserType;
 import com.process.repository.UserRepository;
+import com.process.service.EmailService;
 import com.process.service.JobCategoryService;
 import com.process.service.UserService;
 
@@ -31,20 +33,23 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 	private final JobCategoryService jobCategoryService;
 	private final ProcessEngine processEngine;
+	private final EmailService emailService;
 	
 	@Autowired
 	public UserServiceImpl(UserRepository userRepository,
 						   JobCategoryService jobCategoryService,
-						   ProcessEngine processEngine) {
+						   ProcessEngine processEngine,
+						   EmailService emailService) {
 		this.userRepository = userRepository;
 		this.jobCategoryService = jobCategoryService;
 		this.processEngine = processEngine;
+		this.emailService = emailService;
 	}
 	
 	@Override
 	public User createUser(String name, String email, String username, String password,
 						   String address, String city, String country, String zipCode, 
-						   String userType, String jobCategories, String distance, Location location) {
+						   String userType, Location location, String jobCategories ) {
 		User user = new User();
 		user.setName(name);
 		user.setEmail(email);
@@ -57,10 +62,12 @@ public class UserServiceImpl implements UserService {
 		user.setType(UserType.valueOf(userType.toUpperCase()));
 		if(user.getType() == UserType.PRAVNO) {
 			user.setJobCategories(parseJobCategoriesFromProcess(jobCategories));
-			user.setDistance(Double.valueOf(distance));
+			//user.setDistance(Double.valueOf(distance));
 		}
 		user.setLocation(location);
-		return this.userRepository.save(user);
+		userRepository.save(user);
+		emailService.sendRegistrationMail(email);
+		return user;
 	}
 
 	@Override
@@ -71,6 +78,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void deleteUser(String username, String email) {
+		System.out.println("Task: Delete user => " + username);
 		Long userId = this.userRepository.findUsersByEmailAndUsername(email, username).getId();
 		this.userRepository.delete(userId);
 	}
@@ -78,6 +86,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional(readOnly = true)
 	public boolean checkUnique(String username, String email) {
+		System.out.println("Task: Check Unique => " + username);
 		return this.userRepository.findUsersByEmailAndUsername(email, username) == null ? true : false;
 	}
 	
@@ -103,6 +112,12 @@ public class UserServiceImpl implements UserService {
 			jobCategories.add(jobCategory);
 		}
 		return jobCategories;
+	}
+
+	@Override
+	public void activateAcount(String email, String username) {
+		User user = userRepository.findUsersByEmailAndUsername(email, username);
+		user.setIsActivated(true);
 	}
 	
 }

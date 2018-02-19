@@ -19,6 +19,7 @@
           <activiti:value id="fizicko" name="Fizicko lice"></activiti:value>
           <activiti:value id="pravno" name="Pravno lice"></activiti:value>
         </activiti:formProperty>
+        <activiti:formProperty id="delatnostId" name="delatnost" type="string" writable="false"></activiti:formProperty>
       </extensionElements>
     </userTask>
     <sequenceFlow id="flow2" sourceRef="exclusivegateway1" targetRef="podaciZaKorisnika"></sequenceFlow>
@@ -48,7 +49,7 @@
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${korektnostPodataka == true}]]></conditionExpression>
     </sequenceFlow>
     <serviceTask id="servicetask3" name="Brisanje korisnika" activiti:expression="${userServiceImpl.deleteUser(email, username)}"></serviceTask>
-    <serviceTask id="servicetask5" name="Cuvanje korisnika i registracioni email" activiti:expression="${userServiceImpl.createUser(nazivId, email, username, passwordId, adresaId, mestoId, drzavaId, postanskiBrojId, vrstaKorisnikaId, delatnostId, udaljenostId, lokacija)}"></serviceTask>
+    <serviceTask id="servicetask5" name="Cuvanje korisnika i registracioni email" activiti:expression="${userServiceImpl.createUser(nazivId, email, username, passwordId, adresaId, mestoId, drzavaId, postanskiBrojId, vrstaKorisnikaId, lokacija, delatnostId)}"></serviceTask>
     <sequenceFlow id="flow19" name="Nije jedinstveno" sourceRef="exclusivegateway4" targetRef="exclusivegateway1">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${korektnostPodataka == false}]]></conditionExpression>
     </sequenceFlow>
@@ -67,12 +68,11 @@
       <sequenceFlow id="flow24" sourceRef="startevent2" targetRef="usertask1"></sequenceFlow>
       <sequenceFlow id="flow25" sourceRef="usertask1" targetRef="servicetask4"></sequenceFlow>
     </subProcess>
-    <sequenceFlow id="flow26" sourceRef="servicetask5" targetRef="subprocess1"></sequenceFlow>
     <endEvent id="endevent3" name="End"></endEvent>
     <sequenceFlow id="flow27" sourceRef="subprocess1" targetRef="endevent3"></sequenceFlow>
     <boundaryEvent id="boundarytimer1" name="Timer" attachedToRef="subprocess1" cancelActivity="true">
       <timerEventDefinition>
-        <timeDate>P1D</timeDate>
+        <timeDate>PT5S</timeDate>
       </timerEventDefinition>
     </boundaryEvent>
     <sequenceFlow id="flow28" sourceRef="boundarytimer1" targetRef="servicetask3"></sequenceFlow>
@@ -157,7 +157,7 @@
         <omgdi:waypoint x="420.0" y="177.0"></omgdi:waypoint>
         <omgdi:waypoint x="440.0" y="173.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="14.0" width="53.0" x="392.0" y="206.0"></omgdc:Bounds>
+          <omgdc:Bounds height="14.0" width="100.0" x="392.0" y="206.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
@@ -211,10 +211,6 @@
       <bpmndi:BPMNEdge bpmnElement="flow25" id="BPMNEdge_flow25">
         <omgdi:waypoint x="1165.0" y="242.0"></omgdi:waypoint>
         <omgdi:waypoint x="1200.0" y="242.0"></omgdi:waypoint>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow26" id="BPMNEdge_flow26">
-        <omgdi:waypoint x="945.0" y="241.0"></omgdi:waypoint>
-        <omgdi:waypoint x="990.0" y="240.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow27" id="BPMNEdge_flow27">
         <omgdi:waypoint x="1381.0" y="240.0"></omgdi:waypoint>

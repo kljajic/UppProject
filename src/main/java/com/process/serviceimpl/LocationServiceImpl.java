@@ -33,6 +33,7 @@ public class LocationServiceImpl implements LocationService {
 		final String apiKey = "AIzaSyDa0TStpnBWBQH3JLGwwhGs0MwhOgMiCDc";
 		GeoApiContext context = new GeoApiContext.Builder().apiKey(apiKey).build();
 		GeocodingResult[] results = null;
+		System.out.println("Adresa: " + adresa);
 		try {
 			results = GeocodingApi.geocode(context, adresa + " " + mesto + ", " + drzava).await();
 			location.setLatitude(results[0].geometry.location.lat);

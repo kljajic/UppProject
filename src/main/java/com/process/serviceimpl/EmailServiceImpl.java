@@ -23,14 +23,20 @@ public class EmailServiceImpl implements EmailService {
 	
 	@Override
 	public void sendRegistrationMail(String to) {
+		System.out.println("usao sendRegMail");
 		String body = "Registration text with registartion link <a>Click to confirm registration</a>";
 		this.sendMail(to, body);
 	}
 
 	@Override
 	public void sendMail(String to, String body) {
-		
-		new Thread(new Runnable() {
+		SimpleMailMessage email = new SimpleMailMessage();
+        email.setFrom("uppprojekat@gmail.com");
+        email.setTo(to);
+        email.setSubject("Registration email");
+        email.setText(body);
+        javaMailSender.send(email);
+		/*new Thread(new Runnable() {
 		
 			@Override
 			public void run() {
@@ -46,7 +52,7 @@ public class EmailServiceImpl implements EmailService {
 		        }
 			}
 			
-		}).start();
+		}).start();*/
 	
 	}
 
