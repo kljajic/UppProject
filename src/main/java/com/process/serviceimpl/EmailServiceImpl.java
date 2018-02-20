@@ -60,6 +60,121 @@ public class EmailServiceImpl implements EmailService {
 	}
 
 	@Override
+	public void sendSmallNumberOfCompanies(String to) {
+		System.out.println("Send Small Number Of Companies Mail => " + to);
+		
+		StringWriter writer = new StringWriter();
+		
+		File genericLinkEmail;
+		try {
+			genericLinkEmail = new ClassPathResource("/html/genericLinkEmail.html").getFile();
+			FileInputStream inputStream = new FileInputStream(genericLinkEmail) ;
+	        IOUtils.copy(inputStream, writer, "utf-8");
+		} catch (IOException e) {
+			writer.write("Postovani, za Vasu aukciju postoji suvise mali broj kompanija koje zadovoljavaju Vase kriterijume. Ukoliko zelite da svejedno nastavite kliknite na sledeci link"
+					+ ": <a href=\"linkHref\">Potvrda aukcije</a>");
+		}
+        
+        String body = writer.toString();
+        //String registrationLink = "http://localhost:8100/users/confirmRegistration?registrationLink=" + user.getRegistrationLink() + "&userId=" + user.getId();
+        
+		body = body.replaceAll("<br class=\"information\"/>", "Postovani, za Vasu aukciju postoji suvise mali broj kompanija koje zadovoljavaju Vase kriterijume. Ukoliko zelite da svejedno nastavite sa aukcijom pratite link za potvrdu.");
+        body = body.replaceAll("<br class=\"linkName\"/>", "Potvrda aukcije");
+		body = body.replaceAll("linkHref", "http://localhost:8100/users/confirmAuction");
+				
+        String subject = "Potvrda aukcije - Mali broj kompanija";
+        
+		this.sendMail(to, body, subject);
+	}
+
+	@Override
+	public void sendEmailToCompany(String to) {
+		System.out.println("Send Email To Companies Mail => " + to);
+		
+		StringWriter writer = new StringWriter();
+		
+		File genericLinkEmail;
+		try {
+			genericLinkEmail = new ClassPathResource("/html/genericLinkEmail.html").getFile();
+			FileInputStream inputStream = new FileInputStream(genericLinkEmail) ;
+	        IOUtils.copy(inputStream, writer, "utf-8");
+		} catch (IOException e) {
+			writer.write("Postovani, u skladu sa Vasim profilom pojavila se aukcija. Ukoliko zelite da pogledate aukciju klinkite na link"
+					+ ": <a href=\"linkHref\">Ponuda</a>");
+		}
+        
+        String body = writer.toString();
+        //String registrationLink = "http://localhost:8100/users/confirmRegistration?registrationLink=" + user.getRegistrationLink() + "&userId=" + user.getId();
+        
+		body = body.replaceAll("<br class=\"information\"/>", "Postovani, u skladu sa Vasim profilom pojavila se ponuda. Ukoliko zelite da pogledate ponudu klinkite na link.");
+        body = body.replaceAll("<br class=\"linkName\"/>", "Ponuda aukcije");
+		body = body.replaceAll("linkHref", "http://localhost:8100/users/auctionOffer");
+				
+        String subject = "Nova aukcija";
+        
+		this.sendMail(to, body, subject);
+		
+	}
+
+	@Override
+	public void sendLowNumberOfOffersEmail(String to) {
+		System.out.println("Send Email To Companies Mail => " + to);
+		
+		StringWriter writer = new StringWriter();
+		
+		File genericLinkEmail;
+		try {
+			genericLinkEmail = new ClassPathResource("/html/genericLinkEmail.html").getFile();
+			FileInputStream inputStream = new FileInputStream(genericLinkEmail) ;
+	        IOUtils.copy(inputStream, writer, "utf-8");
+		} catch (IOException e) {
+			writer.write("Postovani, za Vasu aukciju postoji suvise mali broj ponuda. Ukoliko zelite da produzite rok za ponude ili da donesete odluku na osnovu postojecih ponuda pratite link"
+					+ ": <a href=\"linkHref\">Potvrda aukcije</a>");
+		}
+        
+        String body = writer.toString();
+        //String registrationLink = "http://localhost:8100/users/confirmRegistration?registrationLink=" + user.getRegistrationLink() + "&userId=" + user.getId();
+        
+		body = body.replaceAll("<br class=\"information\"/>", "Postovani, za Vasu aukciju postoji suvise mali broj ponuda. Ukoliko zelite da produzite rok za ponude ili da donesete odluku na osnovu postojecih ponuda pratite link.");
+        body = body.replaceAll("<br class=\"linkName\"/>", "Potvrda aukcije");
+		body = body.replaceAll("linkHref", "http://localhost:8100/users/reviewAuction");
+				
+        String subject = "Potvrda aukcije - Prihvacen zahtev - Odredjivanje termina pocetka";
+        
+		this.sendMail(to, body, subject);
+		
+	}
+
+	@Override
+	public void sentOfferAcceptanceEmail(String to) {
+		System.out.println("Send Email To Companies Mail => " + to);
+		
+		StringWriter writer = new StringWriter();
+		
+		File genericLinkEmail;
+		try {
+			genericLinkEmail = new ClassPathResource("/html/genericLinkEmail.html").getFile();
+			FileInputStream inputStream = new FileInputStream(genericLinkEmail) ;
+	        IOUtils.copy(inputStream, writer, "utf-8");
+		} catch (IOException e) {
+			writer.write("Postovatni, Vasa ponuda za aukciju je prihvacena, za utvrdjivanje termina pocetka izvrsavanja zahteva ispratite link"
+					+ ": <a href=\"linkHref\">Potvrda aukcije</a>");
+		}
+        
+        String body = writer.toString();
+        //String registrationLink = "http://localhost:8100/users/confirmRegistration?registrationLink=" + user.getRegistrationLink() + "&userId=" + user.getId();
+        
+		body = body.replaceAll("<br class=\"information\"/>", "Postovatni, Vasa ponuda za aukciju je prihvacena, za utvrdjivanje termina pocetka izvrsavanja zahteva ispratite link.");
+        body = body.replaceAll("<br class=\"linkName\"/>", "Potvrda aukcije");
+		body = body.replaceAll("linkHref", "http://localhost:8100/users/makeTerms");
+				
+        String subject = "Potvrda aukcije - Prihvacen zahtev - Odredjivanje termina pocetka";
+        
+		this.sendMail(to, body, subject);
+		
+	}
+	
+	@Override
 	public void sendMail(String to, String body, String subject) {
 		JavaMailSenderImpl mailSender = (JavaMailSenderImpl) emailConfiguration.getGoogleJavaMailSender();
 		MimeMessage message = emailConfiguration.getGoogleJavaMailSender().createMimeMessage();

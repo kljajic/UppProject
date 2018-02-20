@@ -1,5 +1,7 @@
 package com.process.serviceimpl;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -61,12 +63,18 @@ public class UserServiceImpl implements UserService {
 		user.setZipCode(zipCode);
 		user.setIsActivated(false);
 		user.setType(UserType.valueOf(userType.toUpperCase()));
+		user.setLocation(location);
+		user.setRegistrationLink(generateRegistrationLink(user.getUsername()));
+		
 		if(user.getType() == UserType.PRAVNO) {
 			user.setJobCategories(parseJobCategoriesFromProcess(jobCategories));
 			user.setDistance(Double.valueOf(distance));
 		}
-		user.setLocation(location);
-		user.setRegistrationLink(generateRegistrationLink(user.getUsername()));
+		
+		Calendar tempCal = Calendar.getInstance();
+		tempCal.set(Calendar.YEAR, 2000);
+		user.setDateRoundRobin(tempCal.getTime());
+
 		user = userRepository.save(user);
 		
 		emailService.sendRegistrationMail(user, email);

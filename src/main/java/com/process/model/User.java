@@ -1,6 +1,7 @@
 package com.process.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -63,8 +65,12 @@ public class User implements Serializable{
 	@Column(name = "distance")
 	private Double distance;
 	
-	@Column(name = "registrationLink")
+	@Column(name = "registration_link")
 	private String registrationLink;
+	
+	@Column(name = "date_round_robin")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ")
+	private Date dateRoundRobin;
 	
 	@ManyToOne
 	private Location location;
@@ -190,8 +196,16 @@ public class User implements Serializable{
 		return registrationLink;
 	}
 
+	public Date getDateRoundRobin() {
+		return dateRoundRobin;
+	}
+
+	public void setDateRoundRobin(Date dateRoundRobin) {
+		this.dateRoundRobin = dateRoundRobin;
+	}
+
 	public void setRegistrationLink(String registrationLink) {
 		this.registrationLink = registrationLink;
 	}
-	
+
 }
