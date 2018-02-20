@@ -129,9 +129,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void activateAcount(String email, String username) {
+	public void activateAcount(String email, String username, String link) {
 		User user = userRepository.findUsersByEmailAndUsername(email, username);
-		user.setIsActivated(true);
+		//user.setIsActivated(true);
+		this.confirmRegistration(link, user);
 	}
 	
 	@Override
@@ -155,8 +156,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean confirmRegistration(String registrationLink, Long userId) {
-		User user = userRepository.findOne(userId);
+	public boolean confirmRegistration(String registrationLink, User user) {
 		
 		if(user != null && user.getRegistrationLink().equals(registrationLink)) {
 			user.setIsActivated(true);

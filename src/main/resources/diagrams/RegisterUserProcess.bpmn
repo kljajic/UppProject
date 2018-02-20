@@ -56,10 +56,16 @@
     <sequenceFlow id="flow23" sourceRef="servicetask3" targetRef="endevent2"></sequenceFlow>
     <subProcess id="subprocess1" name="Aktivacija naloga">
       <startEvent id="startevent2" name="Start"></startEvent>
-      <serviceTask id="servicetask4" name="Aktivacija naloga" activiti:expression="${userServiceImpl.activateAcount(email, username)}"></serviceTask>
+      <serviceTask id="servicetask4" name="Aktivacija naloga" activiti:expression="${userServiceImpl.activateAcount(email, username, ispravanLink)}"></serviceTask>
       <sequenceFlow id="flow22" sourceRef="servicetask4" targetRef="endevent1"></sequenceFlow>
       <endEvent id="endevent1" name="End"></endEvent>
-      <sequenceFlow id="flow30" sourceRef="startevent2" targetRef="servicetask4"></sequenceFlow>
+      <userTask id="potvrdaRegistracije" name="Potvrda registracije" activiti:assignee="pera">
+        <extensionElements>
+          <activiti:formProperty id="ispravanLink" name="Ispravan link" type="string" required="true"></activiti:formProperty>
+        </extensionElements>
+      </userTask>
+      <sequenceFlow id="flow30" sourceRef="startevent2" targetRef="potvrdaRegistracije"></sequenceFlow>
+      <sequenceFlow id="flow31" sourceRef="potvrdaRegistracije" targetRef="servicetask4"></sequenceFlow>
     </subProcess>
     <endEvent id="endevent3" name="End"></endEvent>
     <sequenceFlow id="flow27" sourceRef="subprocess1" targetRef="endevent3"></sequenceFlow>
@@ -120,6 +126,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
         <omgdc:Bounds height="35.0" width="35.0" x="1330.0" y="225.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="potvrdaRegistracije" id="BPMNShape_potvrdaRegistracije">
+        <omgdc:Bounds height="55.0" width="105.0" x="1060.0" y="215.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="boundarytimer1" id="BPMNShape_boundarytimer1">
         <omgdc:Bounds height="30.0" width="30.0" x="1031.0" y="125.0"></omgdc:Bounds>
@@ -197,6 +206,10 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow30" id="BPMNEdge_flow30">
         <omgdi:waypoint x="1035.0" y="242.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1060.0" y="242.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow31" id="BPMNEdge_flow31">
+        <omgdi:waypoint x="1165.0" y="242.0"></omgdi:waypoint>
         <omgdi:waypoint x="1200.0" y="242.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow27" id="BPMNEdge_flow27">

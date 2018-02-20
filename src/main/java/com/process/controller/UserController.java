@@ -23,15 +23,5 @@ public class UserController {
 	public void startRegisterProcess() {
 		this.userService.startRegisterProcess();
 	}
-	
-	@GetMapping("/confirmRegistration")
-	public void confirmRegistration(@RequestParam(value = "registrationLink", required = true) String registrationLink,
-									@RequestParam(value = "userId", required = true) Long userId) {
-		
-		if(this.userService.confirmRegistration(registrationLink, userId)) {
-			System.out.println("Successfully confirmed => " + userId);
-			return;
-		} 
-		System.out.println("Unsuccessful confirmation (already activated or invalid registration link) => " + userId);
-	}
+
 }
