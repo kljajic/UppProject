@@ -1,7 +1,6 @@
 package com.process.serviceimpl;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -87,6 +86,12 @@ public class UserServiceImpl implements UserService {
 	public User getUser(Long userId) {
 		return this.userRepository.getOne(userId);
 	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public User getUser(String username, String email) {
+		return this.userRepository.findUsersByEmailAndUsername(email, username);
+	}
 
 	@Override
 	public void deleteUser(String username, String email) {
@@ -165,4 +170,5 @@ public class UserServiceImpl implements UserService {
 		
 		return false;
 	}
+
 }

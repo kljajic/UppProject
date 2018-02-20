@@ -25,6 +25,7 @@ import com.esotericsoftware.yamlbeans.YamlReader;
 public class ProcessConfiguration {
 
 	private String  registrationProcesUri;
+	private String  auctionProcesUri;
 	private String  groupsUri;
 	private String  usersUri;
 	private ProcessEngine processEngine;
@@ -32,6 +33,7 @@ public class ProcessConfiguration {
 	@Autowired
 	public ProcessConfiguration(ProcessEngine processEngine) throws IOException {
 		registrationProcesUri = new ClassPathResource("diagrams/RegisterUserProcess.bpmn").getPath();
+		auctionProcesUri = new ClassPathResource("diagrams/AuctionProcess.bpmn").getPath();
 		groupsUri = new ClassPathResource("properties/groups.yml").getFile().getAbsolutePath();
 		usersUri = new ClassPathResource("properties/users.yml").getFile().getAbsolutePath();
 		this.processEngine = processEngine;
@@ -50,6 +52,7 @@ public class ProcessConfiguration {
 			repositoryService.deleteDeployment(d.getId(), true);
 		}
 		repositoryService.createDeployment().addClasspathResource(this.registrationProcesUri).deploy();
+		repositoryService.createDeployment().addClasspathResource(this.auctionProcesUri).deploy();
 		System.out.println("KRAJ INICIJALIZACIJE PROCESS ENGINE-A => Ukupan broj deployment-a: " + repositoryService.createDeploymentQuery().count());
 	}
 

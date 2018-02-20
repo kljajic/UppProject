@@ -5,14 +5,17 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -77,6 +80,12 @@ public class User implements Serializable{
 	
 	@ManyToMany(targetEntity = com.process.model.JobCategory.class)
 	private Set<JobCategory> jobCategories = new HashSet<>();
+	
+	@OneToMany(mappedBy = "initiator", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<PurchaseRequest> purchaseRequests = new HashSet<>();
+	
+	@OneToMany(mappedBy = "initiator", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Offer> offers = new HashSet<>();
 
 	public Long getId() {
 		return id;
@@ -206,6 +215,26 @@ public class User implements Serializable{
 
 	public void setRegistrationLink(String registrationLink) {
 		this.registrationLink = registrationLink;
+	}
+	
+	@JsonIgnore
+	public Set<PurchaseRequest> getPurchaseRequests() {
+		return purchaseRequests;
+	}
+
+	@JsonProperty
+	public void setPurchaseRequests(Set<PurchaseRequest> purchaseRequests) {
+		this.purchaseRequests = purchaseRequests;
+	}
+	
+	@JsonIgnore
+	public Set<Offer> getOffers() {
+		return offers;
+	}
+
+	@JsonProperty
+	public void setOffers(Set<Offer> offers) {
+		this.offers = offers;
 	}
 
 }

@@ -14,4 +14,5 @@ public interface UserRepository extends JpaRepository<User, Long>, Serializable{
 
 	User findUsersByEmailAndUsername(String email, String username);
 	List<User> findUserByJobCategoriesNameIgnoreCaseAndDateRoundRobinIsAfterOrderByDateRoundRobinAsc(String jobCategory, Date dateRoundRobin);
+
 }
