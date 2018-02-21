@@ -152,7 +152,7 @@
     </sequenceFlow>
     <sequenceFlow id="flow41" sourceRef="usertask12" targetRef="servicetask8"></sequenceFlow>
     <sequenceFlow id="flow42" sourceRef="servicetask8" targetRef="exclusivegateway6"></sequenceFlow>
-    <serviceTask id="servicetask8" name="Osvezavanje liste firmi" activiti:expression="${dummyServiceImpl.dummyMethod()}"></serviceTask>
+    <serviceTask id="servicetask8" name="Osvezavanje liste firmi" activiti:expression="${legalPersonServiceImpl.refreshCompanyListByCategory(kategorijaId, firme)}"></serviceTask>
     <intermediateCatchEvent id="timerintermediatecatchevent1" name="TimerCatchEvent">
       <timerEventDefinition>
         <timeDate>${rokPonudeId}</timeDate>
@@ -288,8 +288,8 @@
     <sequenceFlow id="flow76" sourceRef="servicetask12" targetRef="parallelgateway2"></sequenceFlow>
     <sequenceFlow id="flow77" sourceRef="usertask20" targetRef="servicetask13"></sequenceFlow>
     <sequenceFlow id="flow78" sourceRef="servicetask13" targetRef="parallelgateway2"></sequenceFlow>
-    <serviceTask id="servicetask12" name="Cuvanje ocene o firmi" activiti:expression="${dummyServiceImpl.dummyMethod()}"></serviceTask>
-    <serviceTask id="servicetask13" name="Cuvanje ocene o korisniku" activiti:expression="${dummyServiceImpl.dummyMethod()}"></serviceTask>
+    <serviceTask id="servicetask12" name="Cuvanje ocene o firmi" activiti:expression="${ userServiceImpl.setRatingToUser(ocenaFirmeId, ponuda.firma.usernameId, initiator)  }"></serviceTask>
+    <serviceTask id="servicetask13" name="Cuvanje ocene o korisniku" activiti:expression="${ userServiceImpl.setRatingToUser(ocenaFirmeId,  initiator, ponuda.firma.usernameId)  }"></serviceTask>
     <serviceTask id="servicetask14" name="Cuvanje zahteva za nabavku" activiti:expression="${purchaseRequestServiceImpl.createPurchaseRequest(kategorijaId, opisPoslaId, maxVrednostId, rokPonudeId, minPonudaId, rokUslugeId)}" activiti:resultVariableName="zahtevZaNabavku"></serviceTask>
     <sequenceFlow id="flow79" sourceRef="usertask1" targetRef="servicetask1"></sequenceFlow>
     <sequenceFlow id="flow80" sourceRef="exclusivegateway5" targetRef="servicetask14"></sequenceFlow>
@@ -547,7 +547,7 @@
         <omgdi:waypoint x="431.0" y="580.0"></omgdi:waypoint>
         <omgdi:waypoint x="431.0" y="623.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="14.0" width="100.0" x="436.0" y="592.0"></omgdc:Bounds>
+          <omgdc:Bounds height="14.0" width="89.0" x="436.0" y="592.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
@@ -558,14 +558,14 @@
         <omgdi:waypoint x="431.0" y="540.0"></omgdi:waypoint>
         <omgdi:waypoint x="431.0" y="473.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="14.0" width="100.0" x="436.0" y="511.0"></omgdc:Bounds>
+          <omgdc:Bounds height="14.0" width="62.0" x="436.0" y="511.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
         <omgdi:waypoint x="451.0" y="453.0"></omgdi:waypoint>
         <omgdi:waypoint x="521.0" y="453.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="14.0" width="100.0" x="440.0" y="462.0"></omgdc:Bounds>
+          <omgdc:Bounds height="14.0" width="76.0" x="440.0" y="462.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
@@ -580,7 +580,7 @@
         <omgdi:waypoint x="801.0" y="473.0"></omgdi:waypoint>
         <omgdi:waypoint x="801.0" y="523.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="14.0" width="100.0" x="808.0" y="479.0"></omgdc:Bounds>
+          <omgdc:Bounds height="14.0" width="57.0" x="808.0" y="479.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
@@ -595,7 +595,7 @@
         <omgdi:waypoint x="431.0" y="383.0"></omgdi:waypoint>
         <omgdi:waypoint x="781.0" y="383.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="14.0" width="100.0" x="524.0" y="371.0"></omgdc:Bounds>
+          <omgdc:Bounds height="14.0" width="64.0" x="524.0" y="371.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow15" id="BPMNEdge_flow15">

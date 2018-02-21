@@ -75,6 +75,9 @@ public class User implements Serializable{
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ")
 	private Date dateRoundRobin;
 	
+	//@Column(name = "average_rating")
+	//private double averageRating;
+	
 	@ManyToOne
 	private Location location;
 	
@@ -86,7 +89,15 @@ public class User implements Serializable{
 	
 	@OneToMany(mappedBy = "initiator", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Offer> offers = new HashSet<>();
+	
+	@OneToMany(mappedBy = "userRating", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Rating> userRatings = new HashSet<>();
 
+
+	@OneToMany(mappedBy = "ratedUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Rating> ratings = new HashSet<>();
+
+	
 	public Long getId() {
 		return id;
 	}
@@ -236,5 +247,27 @@ public class User implements Serializable{
 	public void setOffers(Set<Offer> offers) {
 		this.offers = offers;
 	}
+
+	@JsonIgnore
+	public Set<Rating> getUserRatings() {
+		return userRatings;
+	}
+
+	@JsonProperty
+	public void setUserRatings(Set<Rating> userRatings) {
+		this.userRatings = userRatings;
+	}
+	
+	@JsonIgnore
+	public Set<Rating> getRatings() {
+		return ratings;
+	}
+
+	@JsonProperty
+	public void setRatings(Set<Rating> ratings) {
+		this.ratings = ratings;
+	}
+	
+	
 
 }

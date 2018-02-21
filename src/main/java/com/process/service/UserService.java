@@ -18,5 +18,6 @@ public interface UserService extends Serializable {
 	void activateAcount(String email, String username, String link);
 	String generateRegistrationLink(String username);
 	boolean confirmRegistration(String registrationLink, User user);
+	void setRatingToUser(int rating, String ratedUserUsername, String userRatingUsername);
 	
 }

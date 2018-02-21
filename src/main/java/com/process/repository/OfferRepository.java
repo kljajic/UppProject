@@ -10,7 +10,7 @@ import com.process.model.Offer;
 @Repository
 public interface OfferRepository extends JpaRepository<Offer, Long> {
 
-	List<Offer> findOffersByPurchaseRequestId(Long purchaseRequestId);//missing order by price and due date
+	List<Offer> findOffersByPurchaseRequestIdOrderByExpensesAscJobDueDateAsc(Long purchaseRequestId);
 	
 	Integer countOffersByPurchaseRequestIdAndCancelOffer(Long purchaseRequestId, Boolean cancelOffer);
 	

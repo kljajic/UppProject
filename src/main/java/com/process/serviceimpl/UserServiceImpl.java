@@ -1,6 +1,7 @@
 package com.process.serviceimpl;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -18,8 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.process.model.JobCategory;
 import com.process.model.Location;
+import com.process.model.Rating;
 import com.process.model.User;
 import com.process.model.UserType;
+import com.process.repository.RatingRepository;
 import com.process.repository.UserRepository;
 import com.process.service.EmailService;
 import com.process.service.JobCategoryService;
@@ -36,15 +39,19 @@ public class UserServiceImpl implements UserService {
 	private final ProcessEngine processEngine;
 	private final EmailService emailService;
 	
+	private final RatingRepository ratingRepository;
+	
 	@Autowired
 	public UserServiceImpl(UserRepository userRepository,
 						   JobCategoryService jobCategoryService,
 						   ProcessEngine processEngine,
-						   EmailService emailService) {
+						   EmailService emailService,
+						   RatingRepository ratingRepository) {
 		this.userRepository = userRepository;
 		this.jobCategoryService = jobCategoryService;
 		this.processEngine = processEngine;
 		this.emailService = emailService;
+		this.ratingRepository = ratingRepository;
 	}
 	
 	@Override
@@ -169,6 +176,20 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		return false;
+	}
+
+	@Override
+	public void setRatingToUser(int rating, String ratedUserUsername, String userRatingUsername) {
+		Rating r = new Rating();
+		r.setDate(new Date());
+		
+		//User userRating = ratingRepository.findByUsername(userRatingUsername);
+		//User ratedUser = ratingRepository.findByUsername(ratedUserUsername);
+		//r.setUserRating(userRating);
+		//r.setRatedUser(ratedUser);
+		r.setRating(rating);
+		
+		ratingRepository.save(r);
 	}
 
 }

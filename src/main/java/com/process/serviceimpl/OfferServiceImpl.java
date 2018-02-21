@@ -74,7 +74,7 @@ public class OfferServiceImpl implements OfferService {
 
 	@Override
 	public List<Offer> formOffersRangListForPurchaseRequest(Long purchaseRequestId) {
-		return offerRepository.findOffersByPurchaseRequestId(purchaseRequestId);
+		return offerRepository.findOffersByPurchaseRequestIdOrderByExpensesAscJobDueDateAsc(purchaseRequestId);
 	}
 
 	@Override

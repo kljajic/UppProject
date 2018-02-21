@@ -2,6 +2,7 @@ package com.process.serviceimpl;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 import org.activiti.engine.ProcessEngine;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,6 @@ public class LegalPersonServiceImpl implements LegalPersonService {
 	
 	@Override
 	public List<User> formCompanyListByCategory(String categoryName) {
-		
 		
 		//User taken from session or a token needs to be implemented for distance and location consideration
 		//Dummy info for User
@@ -76,6 +76,33 @@ public class LegalPersonServiceImpl implements LegalPersonService {
 		Double distance = earthRadius * c;
 		
 		return distance;
+	}
+
+	@Override
+	public List<User> refreshCompanyListByCategory(String categoryName, List<User> companies) {
+		User user = userRepository.findOne(2L);
+		
+		Calendar tempCal = Calendar.getInstance();
+		
+		List<User> companyList = userRepository.findUserByJobCategoriesNameIgnoreCaseAndDateRoundRobinIsBeforeOrderByDateRoundRobinAsc(categoryName, tempCal.getTime());
+		
+		companyList.stream().filter(tempUser ->  tempUser.getDistance() > calculateDistance(user.getLocation(), tempUser.getLocation()));
+
+		for(User deniedCompany : companies) {
+			for(User company : companyList) {
+				if(company.getId().equals(deniedCompany.getId())) {
+					companyList.remove(company);
+					break;
+				}
+			}
+		}
+		
+		companyList.stream().forEach(tempUser -> {
+			tempUser.setDateRoundRobin(tempCal.getTime());
+			userRepository.save(tempUser);
+		});
+		
+		return companyList;
 	}
 	
 }
