@@ -7,6 +7,6 @@ import com.process.model.PurchaseRequest;
 public interface PurchaseRequestService {
 
 	PurchaseRequest createPurchaseRequest(String categoryName, String jobDescription, Double maxPrice, 
-										  Date offerDueDate, Long minimumNumberOfOffers, Date jobDueDate);
+										  String offerDueDate, Long minimumNumberOfOffers, String jobDueDate);
 	
 }

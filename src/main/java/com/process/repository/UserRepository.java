@@ -13,6 +13,6 @@ import com.process.model.User;
 public interface UserRepository extends JpaRepository<User, Long>, Serializable{
 
 	User findUsersByEmailAndUsername(String email, String username);
-	List<User> findUserByJobCategoriesNameIgnoreCaseAndDateRoundRobinIsAfterOrderByDateRoundRobinAsc(String jobCategory, Date dateRoundRobin);
+	List<User> findUserByJobCategoriesNameIgnoreCaseAndDateRoundRobinIsBeforeOrderByDateRoundRobinAsc(String jobCategory, Date dateRoundRobin);
 
 }

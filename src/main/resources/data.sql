@@ -1,8 +1,8 @@
 --USERS
-insert into user(id, address, city, email, user_type, name, password, username, zip_code) values (1, 'Ulica 6/13', 'Grad 1', 'email1@email.com', 'FIZICKO', 'Naziv 1', 'password1', 'username1', '21000');
-insert into user(id, address, city, email, user_type, name, password, username, zip_code) values (2, 'Ulica 4', 'Grad 2', 'email2@email.com', 'PRAVNO', 'Naziv 2', 'password2', 'username2', '21001');
-insert into user(id, address, city, email, user_type, name, password, username, zip_code) values (3, 'Ulica 15/2', 'Grad 3', 'email3@email.com', 'PRAVNO', 'Naziv 3', 'password3', 'username3', '21002');
-insert into user(id, address, city, email, user_type, name, password, username, zip_code) values (4, 'Ulica 3/14', 'Grad 4', 'email4@email.com', 'PRAVNO', 'Naziv 4', 'password4', 'username4', '21003');
+insert into user(id, address, city, email, user_type, name, password, username, zip_code, date_round_robin) values (1, 'Ulica 6/13', 'Grad 1', 'email1@email.com', 'FIZICKO', 'Naziv 1', 'password1', 'username1', '21000', '2000-01-01');
+insert into user(id, address, city, email, user_type, name, password, username, zip_code, date_round_robin) values (2, 'Ulica 4', 'Grad 2', 'mmikac27@gmail.com', 'PRAVNO', 'Naziv 2', 'password2', 'username2', '21001', '2000-01-01');
+insert into user(id, address, city, email, user_type, name, password, username, zip_code, date_round_robin) values (3, 'Ulica 15/2', 'Grad 3', 'email3@email.com', 'PRAVNO', 'Naziv 3', 'password3', 'username3', '21002', '2000-01-01');
+insert into user(id, address, city, email, user_type, name, password, username, zip_code, date_round_robin) values (4, 'Ulica 3/14', 'Grad 4', 'email4@email.com', 'PRAVNO', 'Naziv 4', 'password4', 'username4', '21003', '2000-01-01');
 
 insert into job_category(id, name) values(1, 'Zdravstvo');
 insert into job_category(id, name) values(2, 'IT');

@@ -1,4 +1,4 @@
-package com.process.config;
+package com.process.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +18,7 @@ public class OfferController {
 		this.offerService = offerService;
 	}
 	
-	@GetMapping("/auction")
+	@GetMapping("/startAuction")
 	public void startAuctionProcess() {
 		this.offerService.startAuctionProcess();
 	}

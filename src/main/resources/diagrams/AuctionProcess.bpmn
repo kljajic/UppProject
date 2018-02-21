@@ -19,21 +19,21 @@
     <serviceTask id="servicetask1" name="Formiranje liste firmi na osnovu kategorije" activiti:expression="${legalPersonServiceImpl.formCompanyListByCategory(kategorijaId)}" activiti:resultVariableName="firme"></serviceTask>
     <exclusiveGateway id="exclusivegateway2" name="Exclusive Gateway"></exclusiveGateway>
     <sequenceFlow id="flow4" sourceRef="servicetask1" targetRef="exclusivegateway2"></sequenceFlow>
-    <userTask id="usertask2" name="Informisanje o ne postojanju firmi"></userTask>
+    <userTask id="usertask2" name="Informisanje o nepostojanju firmi" activiti:assignee="${initiator}"></userTask>
     <sequenceFlow id="flow5" name="Nepostojanje firme" sourceRef="exclusivegateway2" targetRef="usertask2">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${firme.length == 0}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${ firme.size() == 0 }]]></conditionExpression>
     </sequenceFlow>
     <endEvent id="endevent1" name="End"></endEvent>
     <sequenceFlow id="flow6" sourceRef="usertask2" targetRef="endevent1"></sequenceFlow>
     <exclusiveGateway id="exclusivegateway3" name="Exclusive Gateway"></exclusiveGateway>
     <sequenceFlow id="flow7" name="Postoje firme" sourceRef="exclusivegateway2" targetRef="exclusivegateway3">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${firme.length > 0}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${ firme.size() != 0 }]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="flow8" name="Nedovoljno firmi" sourceRef="exclusivegateway3" targetRef="servicetask2">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${firme.length < minPonudaId}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${firme.size() < minPonudaId}]]></conditionExpression>
     </sequenceFlow>
-    <serviceTask id="servicetask2" name="Potvrda o saradnji" activiti:expression="${emailServiceImpl.sendSmallNumberOfCompanies(initiator.email)}"></serviceTask>
-    <userTask id="usertask3" name="Donosenje odluke">
+    <serviceTask id="servicetask2" name="Potvrda o saradnji" activiti:expression="${emailServiceImpl.sendSmallNumberOfCompanies( initiator  )}"></serviceTask>
+    <userTask id="usertask3" name="Donosenje odluke" activiti:assignee="${initiator}">
       <extensionElements>
         <activiti:formProperty id="manjeFirmiId" name="Manje firmi" type="boolean" required="true"></activiti:formProperty>
       </extensionElements>
@@ -50,7 +50,7 @@
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${manjeFirmiId == true}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="flow13" name="Dovoljno firmi" sourceRef="exclusivegateway3" targetRef="exclusivegateway5">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${firme.length >= minPonudaId}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${firme.size() >= minPonudaId}]]></conditionExpression>
     </sequenceFlow>
     <exclusiveGateway id="exclusivegateway6" name="Exclusive Gateway"></exclusiveGateway>
     <sequenceFlow id="flow15" sourceRef="exclusivegateway6" targetRef="servicetask3"></sequenceFlow>
@@ -61,7 +61,7 @@
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="firme" activiti:elementVariable="firma"></multiInstanceLoopCharacteristics>
       <startEvent id="startevent2" name="Start"></startEvent>
       <sequenceFlow id="flow17" sourceRef="startevent2" targetRef="exclusivegateway7"></sequenceFlow>
-      <userTask id="usertask4" name="Popunjavanje ponude" activiti:assignee="${firma.usernameId}">
+      <userTask id="usertask4" name="Popunjavanje ponude" activiti:assignee="${firma.username}">
         <extensionElements>
           <activiti:formProperty id="odustajanjeOdPonudeId" name="Odustajanje od ponude" type="boolean" required="true"></activiti:formProperty>
           <activiti:formProperty id="troskoviId" name="Troskovi ponude" type="long" required="true"></activiti:formProperty>
@@ -580,7 +580,7 @@
         <omgdi:waypoint x="801.0" y="473.0"></omgdi:waypoint>
         <omgdi:waypoint x="801.0" y="523.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="14.0" width="57.0" x="808.0" y="479.0"></omgdc:Bounds>
+          <omgdc:Bounds height="14.0" width="100.0" x="808.0" y="479.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
@@ -632,7 +632,7 @@
         <omgdi:waypoint x="1229.0" y="639.0"></omgdi:waypoint>
         <omgdi:waypoint x="1230.0" y="587.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="14.0" width="100.0" x="1469.0" y="661.0"></omgdc:Bounds>
+          <omgdc:Bounds height="14.0" width="34.0" x="1469.0" y="661.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow25" id="BPMNEdge_flow25">
@@ -751,7 +751,7 @@
         <omgdi:waypoint x="2143.0" y="306.0"></omgdi:waypoint>
         <omgdi:waypoint x="2213.0" y="307.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="14.0" width="100.0" x="2143.0" y="306.0"></omgdc:Bounds>
+          <omgdc:Bounds height="14.0" width="66.0" x="2143.0" y="306.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow47" id="BPMNEdge_flow47">

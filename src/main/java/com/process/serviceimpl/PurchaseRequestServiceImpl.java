@@ -1,5 +1,7 @@
 package com.process.serviceimpl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +25,27 @@ public class PurchaseRequestServiceImpl implements PurchaseRequestService {
 	
 	@Override
 	public PurchaseRequest createPurchaseRequest(String categoryName, String jobDescription, Double maxPrice,
-			Date offerDueDate, Long minimumNumberOfOffers, Date jobDueDate) {
+			String offerDueDateS, Long minimumNumberOfOffers,String jobDueDateS) {
 		PurchaseRequest purchaseRequest = new PurchaseRequest();
 		purchaseRequest.setCategory(categoryName);
 		purchaseRequest.setJobDescription(jobDescription);
 		purchaseRequest.setMaxValue(maxPrice);
-		purchaseRequest.setOfferDueDate(offerDueDate);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date offerDueDate;
+		Date jobDueDate;
+		try {
+			offerDueDate = sdf.parse(offerDueDateS);
+		} catch (ParseException e) {
+			offerDueDate = new Date();
+			System.out.println("Njet datum parsiranje");
+		}
+		try {
+			jobDueDate = sdf.parse(jobDueDateS);
+		} catch (ParseException e) {
+			jobDueDate = new Date();
+			System.out.println("Njet datum parsiranje");
+		}
 		purchaseRequest.setMinNumberOfOffers(minimumNumberOfOffers);
-		purchaseRequest.setJobDueDate(jobDueDate);
 		return purchaseRequestRepository.save(purchaseRequest);
 	}
 

@@ -34,11 +34,11 @@ public class LegalPersonServiceImpl implements LegalPersonService {
 		
 		//User taken from session or a token needs to be implemented for distance and location consideration
 		//Dummy info for User
-		User user = userRepository.findOne(1L);
+		User user = userRepository.findOne(2L);
 		
 		Calendar tempCal = Calendar.getInstance();
 		
-		List<User> companyList = userRepository.findUserByJobCategoriesNameIgnoreCaseAndDateRoundRobinIsAfterOrderByDateRoundRobinAsc(categoryName, tempCal.getTime());
+		List<User> companyList = userRepository.findUserByJobCategoriesNameIgnoreCaseAndDateRoundRobinIsBeforeOrderByDateRoundRobinAsc(categoryName, tempCal.getTime());
 		
 		companyList.stream().filter(tempUser ->  tempUser.getDistance() > calculateDistance(user.getLocation(), tempUser.getLocation()));
 		

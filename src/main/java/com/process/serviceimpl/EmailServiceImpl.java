@@ -8,6 +8,7 @@ import java.io.StringWriter;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.activiti.engine.ProcessEngine;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -28,9 +29,12 @@ public class EmailServiceImpl implements EmailService {
 	
 	private final EmailConfiguration emailConfiguration;
 	
+	private final ProcessEngine processEngine;
+	
 	@Autowired
-	public EmailServiceImpl(EmailConfiguration emailConfiguration) {
+	public EmailServiceImpl(EmailConfiguration emailConfiguration, ProcessEngine processEngine) {
 		this.emailConfiguration = emailConfiguration;
+		this.processEngine = processEngine;
 	}
 	
 	@Override
@@ -60,7 +64,10 @@ public class EmailServiceImpl implements EmailService {
 	}
 
 	@Override
-	public void sendSmallNumberOfCompanies(String to) {
+	public void sendSmallNumberOfCompanies(String initiator) {
+		
+		String to = processEngine.getIdentityService().getUserInfo(initiator, "email");
+		
 		System.out.println("Send Small Number Of Companies Mail => " + to);
 		
 		StringWriter writer = new StringWriter();
@@ -78,7 +85,7 @@ public class EmailServiceImpl implements EmailService {
         String body = writer.toString();
         //String registrationLink = "http://localhost:8100/users/confirmRegistration?registrationLink=" + user.getRegistrationLink() + "&userId=" + user.getId();
         
-		body = body.replaceAll("<br class=\"information\"/>", "Postovani, za Vasu aukciju postoji suvise mali broj kompanija koje zadovoljavaju Vase kriterijume. Ukoliko zelite da svejedno nastavite sa aukcijom pratite link za potvrdu.");
+		body = body.replaceAll("<br class=\"information\"/>", "za Vasu aukciju postoji suvise mali broj kompanija koje zadovoljavaju Vase kriterijume. Ukoliko zelite da svejedno nastavite sa aukcijom pratite link za potvrdu.");
         body = body.replaceAll("<br class=\"linkName\"/>", "Potvrda aukcije");
 		body = body.replaceAll("linkHref", "http://localhost:8100/users/confirmAuction");
 				
@@ -106,7 +113,7 @@ public class EmailServiceImpl implements EmailService {
         String body = writer.toString();
         //String registrationLink = "http://localhost:8100/users/confirmRegistration?registrationLink=" + user.getRegistrationLink() + "&userId=" + user.getId();
         
-		body = body.replaceAll("<br class=\"information\"/>", "Postovani, u skladu sa Vasim profilom pojavila se ponuda. Ukoliko zelite da pogledate ponudu klinkite na link.");
+		body = body.replaceAll("<br class=\"information\"/>", "u skladu sa Vasim profilom pojavila se ponuda. Ukoliko zelite da pogledate ponudu klinkite na link.");
         body = body.replaceAll("<br class=\"linkName\"/>", "Ponuda aukcije");
 		body = body.replaceAll("linkHref", "http://localhost:8100/users/auctionOffer");
 				
@@ -135,7 +142,7 @@ public class EmailServiceImpl implements EmailService {
         String body = writer.toString();
         //String registrationLink = "http://localhost:8100/users/confirmRegistration?registrationLink=" + user.getRegistrationLink() + "&userId=" + user.getId();
         
-		body = body.replaceAll("<br class=\"information\"/>", "Postovani, za Vasu aukciju postoji suvise mali broj ponuda. Ukoliko zelite da produzite rok za ponude ili da donesete odluku na osnovu postojecih ponuda pratite link.");
+		body = body.replaceAll("<br class=\"information\"/>", "za Vasu aukciju postoji suvise mali broj ponuda. Ukoliko zelite da produzite rok za ponude ili da donesete odluku na osnovu postojecih ponuda pratite link.");
         body = body.replaceAll("<br class=\"linkName\"/>", "Potvrda aukcije");
 		body = body.replaceAll("linkHref", "http://localhost:8100/users/reviewAuction");
 				
@@ -164,7 +171,7 @@ public class EmailServiceImpl implements EmailService {
         String body = writer.toString();
         //String registrationLink = "http://localhost:8100/users/confirmRegistration?registrationLink=" + user.getRegistrationLink() + "&userId=" + user.getId();
         
-		body = body.replaceAll("<br class=\"information\"/>", "Postovatni, Vasa ponuda za aukciju je prihvacena, za utvrdjivanje termina pocetka izvrsavanja zahteva ispratite link.");
+		body = body.replaceAll("<br class=\"information\"/>", " Vasa ponuda za aukciju je prihvacena, za utvrdjivanje termina pocetka izvrsavanja zahteva ispratite link.");
         body = body.replaceAll("<br class=\"linkName\"/>", "Potvrda aukcije");
 		body = body.replaceAll("linkHref", "http://localhost:8100/users/makeTerms");
 				

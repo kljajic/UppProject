@@ -57,13 +57,16 @@ public class OfferServiceImpl implements OfferService {
 	
 	@Override
 	public void startAuctionProcess() {
-		Map<String, Object> registerProcessVariables = new HashMap<String, Object>();
-		registerProcessVariables.put("brojac", new Integer(0));
+		Map<String, Object> austionProcessVariables = new HashMap<String, Object>();
+		austionProcessVariables.put("brojac", new Integer(0));
 		TaskService taskService = processEngine.getTaskService();/////
 		List<Task> tasks = taskService.createTaskQuery().taskAssignee("pera").list();/////
 		System.out.println("Pera pre startovanja procesa ima: " + tasks.size() + " taskova");/////
-		ProcessInstance processInstance = processEngine.getRuntimeService().startProcessInstanceByKey("auctionProcess", registerProcessVariables);
+		processEngine.getIdentityService().setUserInfo("pera", "email", "mmikac27@gmail.com");
+		processEngine.getIdentityService().setAuthenticatedUserId("pera");
+		ProcessInstance processInstance = processEngine.getRuntimeService().startProcessInstanceByKey("auctionProcess", austionProcessVariables);
 		processInstance.getProcessVariables().put("processInstanceId", processInstance.getId());
+		String yoy =  processEngine.getIdentityService().getUserInfo("pera", "email");
 		System.out.println("ID PROCESA: " + processInstance.getId());
 		tasks = processEngine.getTaskService().createTaskQuery().taskAssignee("pera").list();/////
 		System.out.println("Pera nakon startovanja procesa ima: " + tasks.size() + " taskova");
