@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.process.service.OfferService;
 
 @RestController
-@RequestMapping("/offers")
+@RequestMapping("/api/offers")
 public class OfferController {
 
 	private final OfferService offerService;

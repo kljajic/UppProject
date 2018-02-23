@@ -19,7 +19,7 @@ import com.process.service.UserDetailsCustomService;
 import com.process.service.UserTaskService;
 
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping("/api/tasks")
 public class UserTaskController {
 
 	private final UserTaskService userTaskService;
