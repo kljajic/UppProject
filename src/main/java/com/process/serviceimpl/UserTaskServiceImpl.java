@@ -9,6 +9,7 @@ import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.form.FormProperty;
 import org.activiti.engine.form.TaskFormData;
+import org.activiti.engine.impl.form.EnumFormType;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,7 +80,43 @@ public class UserTaskServiceImpl implements UserTaskService{
 		taskProperty.setReadable(formProperty.isReadable());
 		taskProperty.setRequired(formProperty.isRequired());
 		taskProperty.setWritable(formProperty.isWritable());
+		taskProperty.setType(getFormPropertyType(formProperty));
+		taskProperty.setValues(getFormPropertyValues(formProperty));
+		
 		return taskProperty;
+	}
+	
+	private String getFormPropertyType(FormProperty formProperty) {
+		if(formProperty.getType() != null) {
+			return formProperty.getType().getName();
+		}
+		return "string";
+	}
+	
+	private Map<String, String> getFormPropertyValues(FormProperty formProperty) {
+		try {
+			if(formProperty.getType() instanceof EnumFormType) {
+				Object information = formProperty.getType().getInformation("values");
+				if(information instanceof Map<?, ?>) {
+					@SuppressWarnings("unchecked")
+					Map<String, String> map = (Map<String, String>) information;
+					return map;
+				} else {
+					Map<String, String> map = new HashMap<String, String>();
+					map.put("value", formProperty.getValue());
+					return map;
+			} 
+			} else {
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("value", formProperty.getValue());
+				return map;
+			} 
+		} catch(NullPointerException exception) {
+			System.out.println(getFormPropertyType(formProperty) + " : " + formProperty.getName() + ": Null value");
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("value", "null");
+			return map;
+		}
 	}
 	
 	private Map<String, Object> mapTaskValues(UserTask userTask) {

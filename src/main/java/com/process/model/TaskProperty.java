@@ -1,6 +1,7 @@
 package com.process.model;
 
 import java.io.Serializable;
+import java.util.Map;
 
 public class TaskProperty implements Serializable {
 
@@ -12,6 +13,8 @@ public class TaskProperty implements Serializable {
 	private Boolean readable;
 	private Boolean writable;
 	private Boolean required;
+	private String type;
+	private Map<String, String> values;
 	
 	public TaskProperty() {
 	}
@@ -63,5 +66,20 @@ public class TaskProperty implements Serializable {
 	public void setRequired(Boolean required) {
 		this.required = required;
 	}
-	
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public Map<String, String> getValues() {
+		return values;
+	}
+
+	public void setValues(Map<String, String> values) {
+		this.values = values;
+	}
 }
