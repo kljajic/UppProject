@@ -65,10 +65,10 @@
         <extensionElements>
           <activiti:formProperty id="odustajanjeOdPonudeId" name="Odustajanje od ponude" type="boolean" required="true"></activiti:formProperty>
           <activiti:formProperty id="troskoviId" name="Troskovi ponude" type="long" required="true"></activiti:formProperty>
-          <activiti:formProperty id="rokId" name="Rok" type="date" datePattern="MM-dd-yyyy hh:mm" required="true"></activiti:formProperty>
+          <activiti:formProperty id="rokId" name="Rok" type="string" required="true"></activiti:formProperty>
         </extensionElements>
       </userTask>
-      <userTask id="usertask6" name="Izmena ponude?" activiti:assignee="${firma.usernameId}">
+      <userTask id="usertask6" name="Izmena ponude?" activiti:assignee="${firma.username}">
         <extensionElements>
           <activiti:formProperty id="izmenaPonudeId" name="Izmena ponude" type="boolean" required="true"></activiti:formProperty>
         </extensionElements>

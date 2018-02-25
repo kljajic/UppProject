@@ -3,7 +3,6 @@ package com.process.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -19,7 +18,7 @@ public class AuthorizationConfiguration extends WebMvcConfigurerAdapter{
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		 registry.addInterceptor(interceptor()).addPathPatterns("/offers/**", "/tasks/**").excludePathPatterns("/users/**").pathMatcher(new AntPathMatcher());
+		 registry.addInterceptor(interceptor()).addPathPatterns("/api/offers/**", "/api/tasks/**").excludePathPatterns("/api/users/**").pathMatcher(new AntPathMatcher());
 	}
 	
 }

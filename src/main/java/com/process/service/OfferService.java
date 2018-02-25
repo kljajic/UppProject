@@ -1,6 +1,5 @@
 package com.process.service;
 
-import java.util.Date;
 import java.util.List;
 
 import com.process.model.Offer;
@@ -8,7 +7,7 @@ import com.process.model.PurchaseRequest;
 
 public interface OfferService {
 
-	Offer createOffer(Boolean cancelOffer, Double price, Date dueDate, PurchaseRequest purchaseRequest, String username, String email);
+	Offer createOffer(Boolean cancelOffer, Double price, String dueDate, PurchaseRequest purchaseRequest, String username, String email);
 	Offer getOffer(Long offerId);
 	void startAuctionProcess();
 	List<Offer> formOffersRangListForPurchaseRequest(Long purchaseRequestId);

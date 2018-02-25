@@ -25,26 +25,22 @@ public class PurchaseRequestServiceImpl implements PurchaseRequestService {
 	
 	@Override
 	public PurchaseRequest createPurchaseRequest(String categoryName, String jobDescription, Double maxPrice,
-			String offerDueDateS, Long minimumNumberOfOffers,String jobDueDateS) {
+			String offerDueDateS, Long minimumNumberOfOffers, String jobDueDateS) {
 		PurchaseRequest purchaseRequest = new PurchaseRequest();
 		purchaseRequest.setCategory(categoryName);
 		purchaseRequest.setJobDescription(jobDescription);
 		purchaseRequest.setMaxValue(maxPrice);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date offerDueDate;
-		Date jobDueDate;
+		Date offerDueDate = null;
+		Date jobDueDate = null;
 		try {
 			offerDueDate = sdf.parse(offerDueDateS);
-		} catch (ParseException e) {
-			offerDueDate = new Date();
-			System.out.println("Njet datum parsiranje");
-		}
-		try {
 			jobDueDate = sdf.parse(jobDueDateS);
 		} catch (ParseException e) {
-			jobDueDate = new Date();
 			System.out.println("Njet datum parsiranje");
 		}
+		purchaseRequest.setJobDueDate(jobDueDate);
+		purchaseRequest.setOfferDueDate(offerDueDate);
 		purchaseRequest.setMinNumberOfOffers(minimumNumberOfOffers);
 		return purchaseRequestRepository.save(purchaseRequest);
 	}

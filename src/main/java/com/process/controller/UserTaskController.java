@@ -3,8 +3,6 @@ package com.process.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.process.model.User;
 import com.process.model.UserTask;
 import com.process.service.SecurityService;
-import com.process.service.UserDetailsCustomService;
 import com.process.service.UserTaskService;
 
 @RestController
@@ -36,7 +33,9 @@ public class UserTaskController {
 	@ResponseBody
 	public List<UserTask> getUserTasks() {
 		User user = userDetailsCustomService.getLoggedUser();
-		return this.userTaskService.getTasksForUser("pera");
+		if(user == null)
+			return null;
+		return this.userTaskService.getTasksForUser(user.getUsername());
 	}
 	
 	@PostMapping

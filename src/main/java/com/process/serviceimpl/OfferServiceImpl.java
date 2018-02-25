@@ -1,5 +1,7 @@
 package com.process.serviceimpl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -15,9 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.process.model.Offer;
 import com.process.model.PurchaseRequest;
+import com.process.model.User;
 import com.process.repository.OfferRepository;
 import com.process.service.EmailService;
 import com.process.service.OfferService;
+import com.process.service.SecurityService;
 import com.process.service.UserService;
 
 @Service
@@ -27,23 +31,30 @@ public class OfferServiceImpl implements OfferService {
 	private OfferRepository offerRepository;
 	private UserService userService;
 	private EmailService emailService;
+	private SecurityService securityService;
 	private ProcessEngine processEngine;
 	
 	@Autowired
-	public OfferServiceImpl(OfferRepository offerRepository, UserService userService, EmailService emailService, ProcessEngine processEngine) {
+	public OfferServiceImpl(OfferRepository offerRepository, UserService userService, EmailService emailService, SecurityService securityService, ProcessEngine processEngine) {
 		this.offerRepository = offerRepository;
 		this.userService = userService;
 		this.emailService = emailService;
+		this.securityService = securityService;
 		this.processEngine = processEngine;
 	}
 	
 	@Override
-	public Offer createOffer(Boolean cancelOffer, Double price, Date dueDate, 
+	public Offer createOffer(Boolean cancelOffer, Double price, String dueDate, 
 							 PurchaseRequest purchaseRequest, String username, String email) {
 		Offer offer = new Offer();
 		offer.setCancelOffer(cancelOffer);
 		offer.setExpenses(price);
-		offer.setJobDueDate(dueDate);
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			offer.setJobDueDate(simpleDateFormat.parse(dueDate));
+		} catch (ParseException e) {
+			offer.setJobDueDate(new Date());
+		}
 		offer.setAccepted(false);
 		offer.setInitiator(userService.getUser(username, email));
 		offer.setPurchaseRequest(purchaseRequest);
@@ -57,19 +68,22 @@ public class OfferServiceImpl implements OfferService {
 	
 	@Override
 	public void startAuctionProcess() {
+		User user = securityService.getLoggedUser();
+		if(user == null) {
+			return;
+		}
 		Map<String, Object> austionProcessVariables = new HashMap<String, Object>();
 		austionProcessVariables.put("brojac", new Integer(0));
 		TaskService taskService = processEngine.getTaskService();/////
-		List<Task> tasks = taskService.createTaskQuery().taskAssignee("pera").list();/////
-		System.out.println("Pera pre startovanja procesa ima: " + tasks.size() + " taskova");/////
-		processEngine.getIdentityService().setUserInfo("pera", "email", "mmikac27@gmail.com");
-		processEngine.getIdentityService().setAuthenticatedUserId("pera");
+		List<Task> tasks = taskService.createTaskQuery().taskAssignee(user.getUsername()).list();/////
+		System.out.println(user.getUsername() + " pre startovanja procesa ima: " + tasks.size() + " taskova");/////
+		processEngine.getIdentityService().setUserInfo(user.getUsername(), "email", user.getEmail());
+		processEngine.getIdentityService().setAuthenticatedUserId(user.getUsername());
 		ProcessInstance processInstance = processEngine.getRuntimeService().startProcessInstanceByKey("auctionProcess", austionProcessVariables);
 		processInstance.getProcessVariables().put("processInstanceId", processInstance.getId());
-		String yoy =  processEngine.getIdentityService().getUserInfo("pera", "email");
 		System.out.println("ID PROCESA: " + processInstance.getId());
-		tasks = processEngine.getTaskService().createTaskQuery().taskAssignee("pera").list();/////
-		System.out.println("Pera nakon startovanja procesa ima: " + tasks.size() + " taskova");
+		tasks = processEngine.getTaskService().createTaskQuery().taskAssignee(user.getUsername()).list();/////
+		System.out.println(user.getUsername() + " nakon startovanja procesa ima: " + tasks.size() + " taskova");
 	}
 
 	@Override

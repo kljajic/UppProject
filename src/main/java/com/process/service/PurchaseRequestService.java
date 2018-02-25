@@ -1,7 +1,5 @@
 package com.process.service;
 
-import java.util.Date;
-
 import com.process.model.PurchaseRequest;
 
 public interface PurchaseRequestService {

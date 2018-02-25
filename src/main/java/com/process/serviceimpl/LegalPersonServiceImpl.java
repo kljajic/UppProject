@@ -2,9 +2,9 @@ package com.process.serviceimpl;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 
 import org.activiti.engine.ProcessEngine;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +23,7 @@ public class LegalPersonServiceImpl implements LegalPersonService {
 	private final JobCategoryRepository jobCategoryRepository;
 	private final ProcessEngine processEngine;
 	
+	@Autowired
 	public LegalPersonServiceImpl(UserRepository userRepository, JobCategoryRepository jobCategoryRepository, ProcessEngine processEngine) {
 		this.userRepository = userRepository;
 		this.jobCategoryRepository = jobCategoryRepository;
