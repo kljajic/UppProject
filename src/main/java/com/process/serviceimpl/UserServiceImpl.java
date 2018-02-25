@@ -119,13 +119,13 @@ public class UserServiceImpl implements UserService {
 		Map<String, Object> registerProcessVariables = new HashMap<String, Object>();
 		registerProcessVariables.put("delatnostId", "");
 		registerProcessVariables.put("udaljenostId", 0L);
-		TaskService taskService = processEngine.getTaskService();/////
-		List<Task> tasks = taskService.createTaskQuery().taskAssignee("pera").list();/////
-		System.out.println("Pera pre startovanja procesa ima: " + tasks.size() + " taskova");/////
+		TaskService taskService = processEngine.getTaskService();
+		List<Task> tasks = taskService.createTaskQuery().taskAssignee("pera").list();
+		System.out.println("Pera pre startovanja procesa ima: " + tasks.size() + " taskova");
 		ProcessInstance processInstance = processEngine.getRuntimeService().startProcessInstanceByKey("registerProcess", registerProcessVariables);
 		processInstance.getProcessVariables().put("processInstanceId", processInstance.getId());
 		System.out.println("ID PROCESA: " + processInstance.getId());
-		tasks = processEngine.getTaskService().createTaskQuery().taskAssignee("pera").list();/////
+		tasks = processEngine.getTaskService().createTaskQuery().taskAssignee("pera").list();
 		System.out.println("Pera nakon startovanja procesa ima: " + tasks.size() + " taskova");
 	}
 
@@ -191,5 +191,10 @@ public class UserServiceImpl implements UserService {
 		
 		ratingRepository.save(r);
 	}
-
+	
+	
+	@Override
+	public void stopRegisterProcess(String processInstanceId) {
+		this.processEngine.getRuntimeService().deleteProcessInstance(processInstanceId, "Registration canceled");
+	}
 }
