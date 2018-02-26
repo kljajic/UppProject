@@ -1,6 +1,8 @@
 package com.process.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,8 +39,8 @@ public class UserController {
 	}
 	
 	@PostMapping("/login")
-	public void login(@RequestBody User user) {
-		securityService.loginUser(user);
+	public User login(@RequestBody User user) {
+		return securityService.loginUser(user);
 	}
 	
 	@GetMapping("/logout")

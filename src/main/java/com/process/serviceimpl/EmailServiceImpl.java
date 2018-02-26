@@ -87,7 +87,7 @@ public class EmailServiceImpl implements EmailService {
         
 		body = body.replaceAll("<br class=\"information\"/>", "za Vasu aukciju postoji suvise mali broj kompanija koje zadovoljavaju Vase kriterijume. Ukoliko zelite da svejedno nastavite sa aukcijom pratite link za potvrdu.");
         body = body.replaceAll("<br class=\"linkName\"/>", "Potvrda aukcije");
-		body = body.replaceAll("linkHref", "http://localhost:8100/users/confirmAuction");
+		body = body.replaceAll("linkHref", "http://localhost:8100/api/users/tasks");
 				
         String subject = "Potvrda aukcije - Mali broj kompanija";
         
@@ -115,7 +115,7 @@ public class EmailServiceImpl implements EmailService {
         
 		body = body.replaceAll("<br class=\"information\"/>", "u skladu sa Vasim profilom pojavila se ponuda. Ukoliko zelite da pogledate ponudu klinkite na link.");
         body = body.replaceAll("<br class=\"linkName\"/>", "Ponuda aukcije");
-		body = body.replaceAll("linkHref", "http://localhost:8100/users/auctionOffer");
+		body = body.replaceAll("linkHref", "http://localhost:8100/api/users/tasks");
 				
         String subject = "Nova aukcija";
         
@@ -173,7 +173,7 @@ public class EmailServiceImpl implements EmailService {
         
 		body = body.replaceAll("<br class=\"information\"/>", " Vasa ponuda za aukciju je prihvacena, za utvrdjivanje termina pocetka izvrsavanja zahteva ispratite link.");
         body = body.replaceAll("<br class=\"linkName\"/>", "Potvrda aukcije");
-		body = body.replaceAll("linkHref", "http://localhost:8100/users/makeTerms");
+		body = body.replaceAll("linkHref", "http://localhost:8100/api/users/tasks");
 				
         String subject = "Potvrda aukcije - Prihvacen zahtev - Odredjivanje termina pocetka";
         

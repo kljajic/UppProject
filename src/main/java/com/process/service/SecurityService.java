@@ -4,7 +4,7 @@ import com.process.model.User;
 
 public interface SecurityService {
 	
-	void loginUser(User user);
+	User loginUser(User user);
 	void logoutUser();
 	User getLoggedUser();
 
