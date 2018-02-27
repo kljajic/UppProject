@@ -48,10 +48,12 @@ public class OfferServiceImpl implements OfferService {
 							 PurchaseRequest purchaseRequest, String username, String email) {
 		Offer offer = new Offer();
 		offer.setCancelOffer(cancelOffer);
-		offer.setExpenses(price);
+		if(price != null)
+			offer.setExpenses(price);
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		try {
-			offer.setJobDueDate(simpleDateFormat.parse(dueDate));
+			if(dueDate != null)
+				offer.setJobDueDate(simpleDateFormat.parse(dueDate));
 		} catch (ParseException e) {
 			offer.setJobDueDate(new Date());
 		}
@@ -63,7 +65,7 @@ public class OfferServiceImpl implements OfferService {
 	
 	@Override
 	public Offer getOffer(Long offerId) {
-		return offerRepository.getOne(offerId);
+		return offerRepository.findOne(offerId);
 	}
 	
 	@Override

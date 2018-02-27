@@ -11,16 +11,19 @@ import org.springframework.transaction.annotation.Transactional;
 import com.process.model.PurchaseRequest;
 import com.process.repository.PurchaseRequestRepository;
 import com.process.service.PurchaseRequestService;
+import com.process.service.SecurityService;
 
 @Service
 @Transactional
 public class PurchaseRequestServiceImpl implements PurchaseRequestService {
 
 	private final PurchaseRequestRepository purchaseRequestRepository;
+	private final SecurityService securityService;
 	
 	@Autowired
-	public PurchaseRequestServiceImpl(PurchaseRequestRepository purchaseRequestRepository) {
+	public PurchaseRequestServiceImpl(PurchaseRequestRepository purchaseRequestRepository, SecurityService securityService) {
 		this.purchaseRequestRepository = purchaseRequestRepository;
+		this.securityService = securityService;
 	}
 	
 	@Override
@@ -42,6 +45,7 @@ public class PurchaseRequestServiceImpl implements PurchaseRequestService {
 		purchaseRequest.setJobDueDate(jobDueDate);
 		purchaseRequest.setOfferDueDate(offerDueDate);
 		purchaseRequest.setMinNumberOfOffers(minimumNumberOfOffers);
+		purchaseRequest.setInitiator(securityService.getLoggedUser());
 		return purchaseRequestRepository.save(purchaseRequest);
 	}
 
