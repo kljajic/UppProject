@@ -55,15 +55,19 @@ public class UserController {
 	
 	@PostMapping("/complete")
 	public void completeTask(@RequestBody UserTask userTask) {
-		this.userTaskService.completeTask(userTask);
+		userTaskService.completeTask(userTask);
 	}
 	
 	@GetMapping("/getTasks")
 	@ResponseBody
 	public List<UserTask> getUserTasks() {
-		return this.userTaskService.getTasksForUser("pera");
+		return userTaskService.getTasksForUser("pera");
 	}
-
+	
+	@GetMapping("/getLoggedUser")
+	public User isLoggedIn() {
+		return securityService.getLoggedUser();
+	}
 }
 
 
