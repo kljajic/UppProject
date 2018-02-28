@@ -75,7 +75,7 @@ public class OfferServiceImpl implements OfferService {
 			return;
 		}
 		Map<String, Object> austionProcessVariables = new HashMap<String, Object>();
-		austionProcessVariables.put("brojac", new Integer(0));
+		austionProcessVariables.put("brojac", 0);
 		TaskService taskService = processEngine.getTaskService();/////
 		List<Task> tasks = taskService.createTaskQuery().taskAssignee(user.getUsername()).list();/////
 		System.out.println(user.getUsername() + " pre startovanja procesa ima: " + tasks.size() + " taskova");/////

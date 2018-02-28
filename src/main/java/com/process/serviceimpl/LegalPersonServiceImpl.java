@@ -3,16 +3,15 @@ package com.process.serviceimpl;
 import java.util.Calendar;
 import java.util.List;
 
-import org.activiti.engine.ProcessEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.process.model.Location;
 import com.process.model.User;
-import com.process.repository.JobCategoryRepository;
 import com.process.repository.UserRepository;
 import com.process.service.LegalPersonService;
+import com.process.service.SecurityService;
 
 @Service
 @Transactional
@@ -20,30 +19,21 @@ public class LegalPersonServiceImpl implements LegalPersonService {
 	
 	
 	private final UserRepository userRepository;
-	private final JobCategoryRepository jobCategoryRepository;
-	private final ProcessEngine processEngine;
+	private final SecurityService securityService;
 	
 	@Autowired
-	public LegalPersonServiceImpl(UserRepository userRepository, JobCategoryRepository jobCategoryRepository, ProcessEngine processEngine) {
+	public LegalPersonServiceImpl(UserRepository userRepository, SecurityService securityService) {
 		this.userRepository = userRepository;
-		this.jobCategoryRepository = jobCategoryRepository;
-		this.processEngine = processEngine;
+		this.securityService = securityService;
 	}
 	
 	@Override
 	public List<User> formCompanyListByCategory(String categoryName) {
 		
-		//User taken from session or a token needs to be implemented for distance and location consideration
-		//Dummy info for User
-		User user = userRepository.findOne(2L);
-		
+		User user = securityService.getLoggedUser();
 		Calendar tempCal = Calendar.getInstance();
-		
 		List<User> companyList = userRepository.findUserByJobCategoriesNameIgnoreCaseAndDateRoundRobinIsBeforeOrderByDateRoundRobinAsc(categoryName, tempCal.getTime());
-		
 		companyList.stream().filter(tempUser ->  tempUser.getDistance() > calculateDistance(user.getLocation(), tempUser.getLocation()));
-		
-		//companyList = companyList.sublist(0, parameterWithNumberOfResultsWanted);
 		
 		companyList.stream().forEach(tempUser -> {
 			tempUser.setDateRoundRobin(tempCal.getTime());
@@ -81,22 +71,26 @@ public class LegalPersonServiceImpl implements LegalPersonService {
 
 	@Override
 	public List<User> refreshCompanyListByCategory(String categoryName, List<User> companies) {
-		User user = userRepository.findOne(2L);
 		
+		
+		User user = securityService.getLoggedUser();
 		Calendar tempCal = Calendar.getInstance();
-		
 		List<User> companyList = userRepository.findUserByJobCategoriesNameIgnoreCaseAndDateRoundRobinIsBeforeOrderByDateRoundRobinAsc(categoryName, tempCal.getTime());
-		
 		companyList.stream().filter(tempUser ->  tempUser.getDistance() > calculateDistance(user.getLocation(), tempUser.getLocation()));
-
+		
 		for(User deniedCompany : companies) {
 			for(User company : companyList) {
-				if(company.getId().equals(deniedCompany.getId())) {
+				if(company.getId() == (deniedCompany.getId())) {
 					companyList.remove(company);
 					break;
 				}
 			}
 		}
+		
+		/*
+		companies.forEach(deniedCompany -> {
+			companyList.stream().filter(company ->  deniedCompany.getId() != company.getId());
+		});*/
 		
 		companyList.stream().forEach(tempUser -> {
 			tempUser.setDateRoundRobin(tempCal.getTime());

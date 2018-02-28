@@ -58,6 +58,10 @@ public class UserServiceImpl implements UserService {
 	public User createUser(String name, String email, String username, String password,
 						   String address, String city, String country, String zipCode, 
 						   String userType, Location location, String jobCategories, String distance) {
+		if(userRepository.findUserByUsername(username) != null) {
+			return null;
+		}
+			
 		User user = new User();
 		user.setName(name);
 		user.setEmail(email);
@@ -80,7 +84,7 @@ public class UserServiceImpl implements UserService {
 		Calendar tempCal = Calendar.getInstance();
 		tempCal.set(Calendar.YEAR, 2000);
 		user.setDateRoundRobin(tempCal.getTime());
-
+		
 		user = userRepository.save(user);
 		
 		emailService.sendRegistrationMail(user, email);
@@ -183,10 +187,10 @@ public class UserServiceImpl implements UserService {
 		Rating r = new Rating();
 		r.setDate(new Date());
 		
-		//User userRating = ratingRepository.findByUsername(userRatingUsername);
-		//User ratedUser = ratingRepository.findByUsername(ratedUserUsername);
-		//r.setUserRating(userRating);
-		//r.setRatedUser(ratedUser);
+		User userRating = userRepository.findUserByUsername(userRatingUsername);
+		User ratedUser = userRepository.findUserByUsername(ratedUserUsername);
+		r.setUserRating(userRating);
+		r.setRatedUser(ratedUser);
 		r.setRating(rating);
 		
 		ratingRepository.save(r);

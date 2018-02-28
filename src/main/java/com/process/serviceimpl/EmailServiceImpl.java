@@ -124,7 +124,9 @@ public class EmailServiceImpl implements EmailService {
 	}
 
 	@Override
-	public void sendLowNumberOfOffersEmail(String to) {
+	public void sendLowNumberOfOffersEmail(String initiator) {
+		String to = processEngine.getIdentityService().getUserInfo(initiator, "email");
+		
 		System.out.println("Send Email To Companies Mail => " + to);
 		
 		StringWriter writer = new StringWriter();
