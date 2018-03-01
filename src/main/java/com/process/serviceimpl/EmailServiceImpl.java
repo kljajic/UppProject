@@ -50,11 +50,11 @@ public class EmailServiceImpl implements EmailService {
 			FileInputStream inputStream = new FileInputStream(registrationEmail) ;
 	        IOUtils.copy(inputStream, writer, "utf-8");
 		} catch (IOException e) {
-			writer.write("Dovrsite registraciju klikom na aktivacioni link: <a href=\"registrationLinkId\">Aktiviranje naloga</a>");
+			writer.write("Dovrsite registraciju upotrebom registracionog koda: registrationLinkId");
 		}
         
         String body = writer.toString();
-        String registrationLink = "http://localhost:8100/users/confirmRegistration?registrationLink=" + user.getRegistrationLink() + "&userId=" + user.getId();
+        String registrationLink = user.getRegistrationLink();
         
         body = body.replaceAll("registrationLinkId", registrationLink);
 		
@@ -115,7 +115,7 @@ public class EmailServiceImpl implements EmailService {
         
 		body = body.replaceAll("<br class=\"information\"/>", "u skladu sa Vasim profilom pojavila se ponuda. Ukoliko zelite da pogledate ponudu klinkite na link.");
         body = body.replaceAll("<br class=\"linkName\"/>", "Ponuda aukcije");
-		body = body.replaceAll("linkHref", "http://localhost:8100/api/users/tasks");
+		body = body.replaceAll("linkHref", "http://localhost:4200/tasks");
 				
         String subject = "Nova aukcija";
         
@@ -146,7 +146,7 @@ public class EmailServiceImpl implements EmailService {
         
 		body = body.replaceAll("<br class=\"information\"/>", "za Vasu aukciju postoji suvise mali broj ponuda. Ukoliko zelite da produzite rok za ponude ili da donesete odluku na osnovu postojecih ponuda pratite link.");
         body = body.replaceAll("<br class=\"linkName\"/>", "Potvrda aukcije");
-		body = body.replaceAll("linkHref", "http://localhost:8100/users/reviewAuction");
+		body = body.replaceAll("linkHref", "http://localhost:4200/tasks");
 				
         String subject = "Potvrda aukcije - Prihvacen zahtev - Odredjivanje termina pocetka";
         
@@ -175,7 +175,7 @@ public class EmailServiceImpl implements EmailService {
         
 		body = body.replaceAll("<br class=\"information\"/>", " Vasa ponuda za aukciju je prihvacena, za utvrdjivanje termina pocetka izvrsavanja zahteva ispratite link.");
         body = body.replaceAll("<br class=\"linkName\"/>", "Potvrda aukcije");
-		body = body.replaceAll("linkHref", "http://localhost:8100/api/users/tasks");
+		body = body.replaceAll("linkHref", "http://localhost:4200/tasks");
 				
         String subject = "Potvrda aukcije - Prihvacen zahtev - Odredjivanje termina pocetka";
         

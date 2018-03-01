@@ -3,6 +3,7 @@ package com.process.config;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,13 +14,18 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.identity.Group;
 import org.activiti.engine.identity.User;
 import org.activiti.engine.repository.Deployment;
+import org.activiti.spring.SpringProcessEngineConfiguration;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Component;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 import com.esotericsoftware.yamlbeans.YamlReader;
+import com.process.activiti.ListOfferFormType;
 
 @Component
 public class ProcessConfiguration {
@@ -29,23 +35,18 @@ public class ProcessConfiguration {
 	private String  groupsUri;
 	private String  usersUri;
 	private ProcessEngine processEngine;
-
+	
 	@Autowired
-	public ProcessConfiguration(ProcessEngine processEngine) throws IOException {
+	public ProcessConfiguration() throws IOException {
 		registrationProcesUri = new ClassPathResource("diagrams/RegisterUserProcess.bpmn").getPath();
 		auctionProcesUri = new ClassPathResource("diagrams/AuctionProcess.bpmn").getPath();
 		groupsUri = new ClassPathResource("properties/groups.yml").getFile().getAbsolutePath();
 		usersUri = new ClassPathResource("properties/users.yml").getFile().getAbsolutePath();
-		this.processEngine = processEngine;
+		this.processEngine = processEngineConfiguration().buildProcessEngine();
 		prepareProcessEngine();
 	}
 	
 	public void prepareProcessEngine() {
-		// ProcessEngine processEngine = ProcessEngineConfiguration
-		// .createProcessEngineConfigurationFromResource("processes/activiti.cfg.xml")
-		// .buildProcessEngine();//.setJdbcUrl("dbc:h2:tcp://localhost/bazaâ€�)
-		// ProcessEngine processEngine =
-		// ProcessEngineConfiguration.createStandaloneProcessEngineConfiguration().setJdbcUrl("dbc:h2:tcp://localhost/baza").buildProcessEngine();
 		RepositoryService repositoryService = this.processEngine.getRepositoryService();
 		System.out.println("POCETAK INICIJALIZACIJE PROCESS ENGINE-A => Ukupan broj deployment-a: " + repositoryService.createDeploymentQuery().count());
 		for (Deployment d : repositoryService.createDeploymentQuery().list()) {
@@ -124,6 +125,37 @@ public class ProcessConfiguration {
 		} catch (YamlException e) {
 			e.printStackTrace();
 		}
-	}
-
+	   }
+	
+	   @Bean
+	   public BasicDataSource dataSource(){
+	      BasicDataSource dataSource = new BasicDataSource();
+	      dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+	      dataSource.setUrl("jdbc:mysql://localhost:3306/process?useSSL=false&createDatabaseIfNotExist=true");
+	      dataSource.setUsername("root");
+	      dataSource.setPassword("root");
+	      dataSource.setDefaultAutoCommit(true);
+	      return dataSource;
+	   }
+	   
+	   @Bean
+	   @DependsOn(value = { "dataSource" })
+	   public DataSourceTransactionManager transactionManager(){
+	      DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
+	      dataSourceTransactionManager.setDataSource(dataSource());
+	      return dataSourceTransactionManager;
+	   }
+	   
+	   @Bean
+	   @DependsOn(value = { "dataSource" })
+	   public SpringProcessEngineConfiguration processEngineConfiguration(){
+	      SpringProcessEngineConfiguration configuration = new SpringProcessEngineConfiguration();
+	      configuration.setDataSource(dataSource());
+	      configuration.setDatabaseType("mysql");
+	      configuration.setTransactionManager(transactionManager());
+	      configuration.setDatabaseSchemaUpdate("true");
+	      configuration.setJobExecutorActivate(true);
+	      configuration.setCustomFormTypes(Arrays.asList(new ListOfferFormType(null)));
+	      return configuration;
+	   }
 }

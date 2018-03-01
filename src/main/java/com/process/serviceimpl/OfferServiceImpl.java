@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.process.activiti.ListOfferFormType;
 import com.process.model.Offer;
 import com.process.model.PurchaseRequest;
 import com.process.model.User;
@@ -48,6 +49,7 @@ public class OfferServiceImpl implements OfferService {
 							 PurchaseRequest purchaseRequest, String username, String email) {
 		Offer offer = new Offer();
 		offer.setCancelOffer(cancelOffer);
+
 		if(price != null)
 			offer.setExpenses(price);
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -89,8 +91,10 @@ public class OfferServiceImpl implements OfferService {
 	}
 
 	@Override
-	public List<Offer> formOffersRangListForPurchaseRequest(Long purchaseRequestId) {
-		return offerRepository.findOffersByPurchaseRequestIdOrderByExpensesAscJobDueDateAsc(purchaseRequestId);
+	public ListOfferFormType formOffersRangListForPurchaseRequest(Long purchaseRequestId) {
+		List<Offer> offers = offerRepository.findOffersByPurchaseRequestIdOrderByExpensesAscJobDueDateAsc(purchaseRequestId);
+		ListOfferFormType loft = new ListOfferFormType(offers);
+		return loft;
 	}
 
 	@Override

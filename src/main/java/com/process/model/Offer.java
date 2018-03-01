@@ -34,6 +34,7 @@ public class Offer implements Serializable {
 	@Column(name = "accepted")
 	private Boolean accepted;
 	
+
 	@ManyToOne
 	private User initiator;
 	
